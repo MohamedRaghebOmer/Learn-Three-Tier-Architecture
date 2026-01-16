@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 using Contacts.Data;
 
 namespace Contacts.Business
@@ -9,7 +11,7 @@ namespace Contacts.Business
         private enum enMode { AddNew, Update };
         private enMode _Mode = enMode.AddNew;
 
-        public int ID { get; } // ID is read only property, because it's an (outo number) emplemented.
+        public int ID { get; set; } // ID is read only property, because it's an (outo number) emplemented.
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -18,6 +20,14 @@ namespace Contacts.Business
         public DateTime DateOfBirth { get; set; }
         public string ImagePath { get; set;}
         public int CountryID { get; set; }
+
+        private bool _AddNewContact()
+        {
+            this.ID = Contacts.Data.clsContactData.AddNewContact(this.FirstName, this.LastName, this.Email, this.Phone, this.Address,
+                this.DateOfBirth, this.CountryID, this.ImagePath);
+
+            return (this.ID != -1);
+        }
 
         public clsContact()
         {
@@ -59,6 +69,27 @@ namespace Contacts.Business
                 return new clsContact(id, firstName, lastName, email, phone, address, dateOfBirth, countryId, imagePath);
             else
                 return null;
+        }
+
+        public bool Save()
+        {
+            switch (this._Mode)
+            {
+                case enMode.AddNew:
+                    if (_AddNewContact())
+                    {
+                        _Mode = enMode.Update;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    // Update: comming soon
+            }
+
+            return false;
         }
 
 

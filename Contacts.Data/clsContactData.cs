@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Data;
 using System.Data.SqlClient;
 using Contacts.Data.Settings;
+using Microsoft.SqlServer.Server;
 
 namespace Contacts.Data
 {
@@ -57,6 +59,51 @@ namespace Contacts.Data
             }
 
             return isFound;
+        }
+
+        public static int AddNewContact(string firstName, string lastName,
+            string email, string phone, string address,
+            DateTime dateOfBirth, int countryID, string imagePath)
+        {
+            int id = -1;
+            SqlConnection connection = null;
+            SqlCommand command = null;
+            string query = @"INSERT INTO Contacts(FirstName, LastName, Email, Phone, Address, DateOfBirth, CountryID, ImagePath)
+                            VALUES
+                            (@firstName, @lastName, @email, @phone, @address, @dateOfBirth, @countryID, @imagePath);
+                            SELECT SCOPE_IDENTITY();";
+
+            try
+            {
+                connection = new SqlConnection(clsDataSettings.connectionString);
+                connection.Open();
+                command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@firstName", firstName);
+                command.Parameters.AddWithValue("@lastName", lastName);
+                command.Parameters.AddWithValue("@email", email);
+                command.Parameters.AddWithValue("@phone", phone);
+                command.Parameters.AddWithValue("@address", address);
+                command.Parameters.AddWithValue("@dateOfBirth", dateOfBirth);
+                command.Parameters.AddWithValue("@countryID", countryID);
+
+                if (imagePath != "")
+                    command.Parameters.AddWithValue("@imagePath", imagePath);
+                else
+                    command.Parameters.AddWithValue("imagePath", System.DBNull.Value);
+
+                    object result = command.ExecuteScalar();
+                if (result != null)
+                    id = Convert.ToInt32(result);
+            }
+            catch (Exception) { } 
+            finally
+            {
+                if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                    connection.Close();
+            }
+            
+            return id;
         }
 
 
