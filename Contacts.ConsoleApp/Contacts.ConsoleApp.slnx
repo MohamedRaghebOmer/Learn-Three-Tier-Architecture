@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="../Contacts.Business/Contacts.Business.csproj" Id="827dee08-436a-4021-9744-45057b105c37" />
+  <Project Path="../Contacts.Data/Contacts.Data.csproj" Id="7257ae29-89a7-4ec2-b195-176fdf83010b" />
+  <Project Path="Contacts.ConsoleApp.csproj" Id="df95398f-af02-472f-a636-798fe2337582" />
+</Solution>
