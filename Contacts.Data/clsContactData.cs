@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Data;
 using System.Data.SqlClient;
 using Contacts.Data.Settings;
-using Microsoft.SqlServer.Server;
 
 namespace Contacts.Data
 {
@@ -86,13 +83,12 @@ namespace Contacts.Data
                 command.Parameters.AddWithValue("@address", address);
                 command.Parameters.AddWithValue("@dateOfBirth", dateOfBirth);
                 command.Parameters.AddWithValue("@countryID", countryID);
-
-                if (imagePath != "")
+                if (!string.IsNullOrEmpty(imagePath)) // nullable value
                     command.Parameters.AddWithValue("@imagePath", imagePath);
                 else
-                    command.Parameters.AddWithValue("imagePath", System.DBNull.Value);
+                    command.Parameters.AddWithValue("@imagePath", DBNull.Value);
 
-                    object result = command.ExecuteScalar();
+                object result = command.ExecuteScalar();
                 if (result != null)
                     id = Convert.ToInt32(result);
             }
@@ -104,6 +100,56 @@ namespace Contacts.Data
             }
             
             return id;
+        }
+
+        public static bool UpdateContact(int id, string firstName, string lastName,
+            string email, string phone, string address,
+            DateTime dateOfBirth, int countryID, string imagePath)
+        {
+            int rowsAffected = 0;
+            SqlConnection connection = null;
+            SqlCommand command = null;
+            string query = @"UPDATE Contacts
+                            SET
+                            FirstName = @firstName,
+                            LastName = @lastName,
+                            Email = @email,
+                            Phone = @phone,
+                            Address = @address,
+                            DateOfBirth = @dateOfBirth,
+                            CountryID = @countryID,
+                            ImagePath = @imagePath
+                            WHERE ContactID = @id";
+
+            try
+            {
+                connection = new SqlConnection(clsDataSettings.connectionString);
+                connection.Open();
+
+                command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@firstName", firstName);
+                command.Parameters.AddWithValue("@lastName", lastName);
+                command.Parameters.AddWithValue("@email", email);
+                command.Parameters.AddWithValue("@phone", phone);
+                command.Parameters.AddWithValue("@address", address);
+                command.Parameters.AddWithValue("@dateOfBirth", dateOfBirth);
+                command.Parameters.AddWithValue("@countryID", countryID);
+                command.Parameters.AddWithValue("@id", id);
+                if (!string.IsNullOrEmpty(imagePath)) // nullable value
+                    command.Parameters.AddWithValue("@imagePath", imagePath);
+                else
+                    command.Parameters.AddWithValue("@imagePath", DBNull.Value);
+
+                rowsAffected = command.ExecuteNonQuery();
+            }
+            catch (Exception) { }
+            finally
+            {
+                if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return rowsAffected > 0;
         }
 
 

@@ -47,11 +47,29 @@ namespace Contacts.ConsoleApp
                 Console.WriteLine("Saving is faild");
             }
         }
+        
+        static void TestUpdate(int id)
+        {
+            clsContact contact = clsContact.Find(id);
+
+            contact.FirstName = "Mazen";
+            contact.LastName = "Ragheb";
+            contact.Email = "mazen@example.com";
+            contact.Address = "kafer-saad";
+            contact.DateOfBirth = new DateTime(2017, 7, 10);
+            contact.ImagePath = @"C:\Photos\MazenRagheb";
+
+            if (contact.Save())
+                Console.WriteLine("Contact updated successflly");
+            else
+                Console.WriteLine("update faild");
+        }
 
         static void Main(string[] args)
         {
             //TestFind(4);
-            TestAddNew();
+            //TestAddNew();
+            TestUpdate(2);
         }
     }
 }
