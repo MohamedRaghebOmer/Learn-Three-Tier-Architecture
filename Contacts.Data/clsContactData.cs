@@ -285,5 +285,36 @@ namespace Contacts.Data
 
             return isFound;
         }
+        
+        public static int AddNewCountry(string countryName, string code, string phoneCode)
+        {
+            int newCountryId = -1;
+            SqlConnection connection = null;
+            string query = @"INSERT INTO Countries (CountryName, Code, PhoneCode)
+                VALUES (@countryName, @code, @phoneCode);
+                SELECT SCOPE_IDENTITY();";
+
+            try
+            {
+                connection = new SqlConnection(clsDataSettings.connectionString);
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@countryName", countryName);
+                command.Parameters.AddWithValue("@code", code);
+                command.Parameters.AddWithValue("@phoneCode", phoneCode);
+
+                object result = command.ExecuteScalar();
+                newCountryId = result != null ? Convert.ToInt32(result) : -1;
+            }
+            catch (Exception) { }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return newCountryId;
+        }
     }
 }

@@ -117,7 +117,7 @@ namespace Contacts.ConsoleApp
 
             if (country != null)
             {
-                Console.WriteLine($"Country ID: {country.ID}");
+                Console.WriteLine($"Country ID: {country.CountryID}");
                 Console.WriteLine($"Country Name: {country.CountryName}");
                 Console.WriteLine($"Country Code: {country.Code}");
                 Console.WriteLine($"Country Phone Code: {country.PhoneCode}");
@@ -126,9 +126,24 @@ namespace Contacts.ConsoleApp
                 Console.WriteLine($"Country with id = {id} is NOT found");
         }
 
+        static void TestAddNew()
+        {
+            clsCountry country = new clsCountry();
+
+            country.CountryName = "Egypt";
+            country.Code = "EGY";
+            country.PhoneCode = "+20";
+
+            if (country.Save())
+                Console.WriteLine("Country add successflly");
+            else
+                Console.WriteLine("adding failed");
+        }
+
         static void Main(string[] arg)
         {
-            TestFind(3);
+            //TestFind(3);
+            TestAddNew();
         }
     }
 }

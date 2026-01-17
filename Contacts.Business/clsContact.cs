@@ -118,14 +118,20 @@ namespace Contacts.Business
         private enum enMode { AddNew, Update }
         private enMode _Mode = enMode.AddNew;
 
-        public int ID { get; set; }
+        public int CountryID { get; set; }
         public string CountryName { get; set; }
         public string Code { get; set; }
         public string PhoneCode { get; set; }
 
+        private bool _AddNewCountry()
+        {
+            this.CountryID = clsCountriesData.AddNewCountry(this.CountryName, this.Code, this.PhoneCode);
+            return this.CountryID != -1;
+        }
+
         private clsCountry(int id, string countryName, string code, string phoneCode)
         {
-            this.ID = id;
+            this.CountryID = id;
             this.CountryName = countryName;
             this.Code = code;
             this.PhoneCode = phoneCode;
@@ -134,7 +140,7 @@ namespace Contacts.Business
 
         public clsCountry()
         {
-            this.ID = -1;
+            this.CountryID = -1;
             this.CountryName = string.Empty;
             this.Code = string.Empty;
             this.PhoneCode = string.Empty;
@@ -149,6 +155,26 @@ namespace Contacts.Business
                 return new clsCountry(id, countryName, code, phoneCode);
             else
                 return null;
+        }
+
+        public bool Save()
+        {
+            switch(this._Mode)
+            {
+                case enMode.AddNew:
+                    if (_AddNewCountry())
+                    {
+                        this._Mode = enMode.Update;
+                        return true;
+                    }
+                    else
+                        return false;
+                
+                //case enMode.Update:
+                   // return _Update();
+            }
+            
+            return false;
         }
     }
 
