@@ -112,4 +112,44 @@ namespace Contacts.Business
             return clsContactData.IsContactExist(id);
         }
     }
+
+    public class clsCountry
+    {
+        private enum enMode { AddNew, Update }
+        private enMode _Mode = enMode.AddNew;
+
+        public int ID { get; set; }
+        public string CountryName { get; set; }
+        public string Code { get; set; }
+        public string PhoneCode { get; set; }
+
+        private clsCountry(int id, string countryName, string code, string phoneCode)
+        {
+            this.ID = id;
+            this.CountryName = countryName;
+            this.Code = code;
+            this.PhoneCode = phoneCode;
+            this._Mode = enMode.AddNew;
+        }
+
+        public clsCountry()
+        {
+            this.ID = -1;
+            this.CountryName = string.Empty;
+            this.Code = string.Empty;
+            this.PhoneCode = string.Empty;
+            this._Mode = enMode.AddNew;
+        }
+
+        public static clsCountry Find(int id)
+        {
+            string countryName = "", code = "", phoneCode = "";
+
+            if (clsCountriesData.GetCountryInfoByID(id, ref countryName, ref code, ref phoneCode))
+                return new clsCountry(id, countryName, code, phoneCode);
+            else
+                return null;
+        }
+    }
+
 }

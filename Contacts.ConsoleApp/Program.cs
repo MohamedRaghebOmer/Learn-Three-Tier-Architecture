@@ -4,7 +4,8 @@ using Contacts.Business;
 
 namespace Contacts.ConsoleApp
 {
-    internal class Program
+    /*
+    internal class clsTestContact
     {
         static void TestFind(int id)
         {
@@ -95,6 +96,7 @@ namespace Contacts.ConsoleApp
                 Console.WriteLine("Contact NOT Existed");
         }
 
+
         static void Main(string[] args)
         {
             //TestFind(4);
@@ -102,7 +104,31 @@ namespace Contacts.ConsoleApp
             //TestUpdate(2);
             //TestDelete(5);
             //TestGetAllContacts();
-            TestContactExist(3);
+            //TestContactExist(3);
+        }
+    }
+    */
+
+    internal class clsTestCountries
+    {
+        static void TestFind(int id)
+        {
+            clsCountry country = clsCountry.Find(id);
+
+            if (country != null)
+            {
+                Console.WriteLine($"Country ID: {country.ID}");
+                Console.WriteLine($"Country Name: {country.CountryName}");
+                Console.WriteLine($"Country Code: {country.Code}");
+                Console.WriteLine($"Country Phone Code: {country.PhoneCode}");
+            }
+            else
+                Console.WriteLine($"Country with id = {id} is NOT found");
+        }
+
+        static void Main(string[] arg)
+        {
+            TestFind(3);
         }
     }
 }

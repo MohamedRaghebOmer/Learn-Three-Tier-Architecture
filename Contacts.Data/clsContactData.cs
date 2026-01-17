@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using Contacts.Data.Settings;
-using Microsoft.SqlServer.Server;
 
 namespace Contacts.Data
 {
@@ -244,7 +243,47 @@ namespace Contacts.Data
 
             return exist;
         }
+    }
 
+    public class clsCountriesData
+    {
+        public static bool GetCountryInfoByID(int id, ref string countryName, ref string code, ref string phoneCode)
+        {
+            bool isFound = false;
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            string query = @"SELECT *
+                            FROM Countries
+                            WHERE CountryID = @id;";
+            try
+            {
+                connection = new SqlConnection(clsDataSettings.connectionString);
+                connection.Open();
 
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+
+                reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    countryName = reader["CountryName"] == DBNull.Value ? "" : reader["CountryName"].ToString();
+                    code = reader["Code"] == DBNull.Value ? "" : reader["Code"].ToString();
+                    phoneCode = reader["PhoneCode"] == DBNull.Value ? "" : reader["PhoneCode"].ToString();
+                    isFound = true;
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                    reader.Close();
+
+                if (connection != null && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return isFound;
+        }
     }
 }
