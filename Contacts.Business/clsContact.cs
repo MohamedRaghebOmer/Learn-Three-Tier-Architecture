@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
 using Contacts.Data;
 
 namespace Contacts.Business
@@ -27,6 +24,12 @@ namespace Contacts.Business
                 this.DateOfBirth, this.CountryID, this.ImagePath);
 
             return (this.ID != -1);
+        }
+
+        private bool _UpdateContact()
+        {
+            return Contacts.Data.clsContactData.UpdateContact(this.ID, this.FirstName, this.LastName, this.Email, this.Phone, this.Address,
+                this.DateOfBirth, this.CountryID, this.ImagePath);
         }
 
         public clsContact()
@@ -86,12 +89,11 @@ namespace Contacts.Business
                         return false;
                     }
 
-                    // Update: comming soon
+                 case enMode.Update:
+                    return _UpdateContact();
             }
 
             return false;
         }
-
-
     }
 }
