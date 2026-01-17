@@ -140,10 +140,32 @@ namespace Contacts.ConsoleApp
                 Console.WriteLine("adding failed");
         }
 
+        static void TestUpdate()
+        {
+            clsCountry country = clsCountry.Find(1);
+
+            if (country != null)
+            {
+                country.Code = "USA";
+                country.PhoneCode = "+1";
+
+                if (country.Save())
+                    Console.WriteLine("Country updated successfully");
+                else
+                    Console.WriteLine("Update failed");
+            }
+            else
+            {
+                Console.WriteLine("Country with ID 1 not found");
+            }
+
+        }
+
         static void Main(string[] arg)
         {
             //TestFind(3);
-            TestAddNew();
+            //TestAddNew();
+            TestUpdate();
         }
     }
 }

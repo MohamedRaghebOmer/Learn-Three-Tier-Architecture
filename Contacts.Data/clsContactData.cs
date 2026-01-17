@@ -316,5 +316,37 @@ namespace Contacts.Data
 
             return newCountryId;
         }
+
+        public static bool UpdateCountry(int id, string countryName, string code, string phoneCode)
+        {
+            int rowsAffected = 0;
+            SqlConnection connection = null;
+            string query = @"UPDATE Countries
+                            SET
+                            CountryName = @countryName, Code = @code, PhoneCode = @phoneCode
+                            WHERE Countries.CountryID = @id;";
+
+            try
+            {
+                connection = new SqlConnection(clsDataSettings.connectionString);
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@countryName", countryName);
+                command.Parameters.AddWithValue("@code", code);
+                command.Parameters.AddWithValue("@phoneCode", phoneCode);
+                command.Parameters.AddWithValue("@id", id);
+
+                rowsAffected = command.ExecuteNonQuery();
+            }
+            catch (Exception) { }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return rowsAffected > 0;
+        }
     }
 }

@@ -129,13 +129,18 @@ namespace Contacts.Business
             return this.CountryID != -1;
         }
 
+        private bool _Update()
+        {
+            return clsCountriesData.UpdateCountry(this.CountryID, this.CountryName, this.Code, this.PhoneCode);
+        }
+
         private clsCountry(int id, string countryName, string code, string phoneCode)
         {
             this.CountryID = id;
             this.CountryName = countryName;
             this.Code = code;
             this.PhoneCode = phoneCode;
-            this._Mode = enMode.AddNew;
+            this._Mode = enMode.Update;
         }
 
         public clsCountry()
@@ -170,8 +175,8 @@ namespace Contacts.Business
                     else
                         return false;
                 
-                //case enMode.Update:
-                   // return _Update();
+                case enMode.Update:
+                   return _Update();
             }
             
             return false;
