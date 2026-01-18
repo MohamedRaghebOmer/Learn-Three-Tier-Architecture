@@ -186,6 +186,11 @@ namespace Contacts.Business
         {
             return clsCountriesData.DeleteCountry(id);
         }
+
+        public static DataTable GetAllCountries()
+        {
+            return clsCountriesData.GetAllCountries();
+        }
     }
 
 }

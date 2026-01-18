@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.Data;
 using Contacts.Business;
 
@@ -169,12 +170,24 @@ namespace Contacts.ConsoleApp
                 Console.WriteLine("Deletion failed");
         }
 
+        static void TestGetAllCountries()
+        {
+            DataTable table = clsCountry.GetAllCountries();
+
+            foreach (DataRow row in table.Rows)
+            {
+                Console.WriteLine(row["CountryID"] + "." + row["CountryName"] + " " + row["Code"] +
+                    " " + row["PhoneCode"]);
+            }
+        }
+
         static void Main(string[] arg)
         {
             //TestFind(3);
             //TestAddNew();
             //TestUpdate();
-            TestDelete(9);
+            //TestDelete(9);
+            TestGetAllCountries();
         }
     }
 }

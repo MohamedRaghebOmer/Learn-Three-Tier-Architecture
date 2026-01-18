@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.SymbolStore;
 using Contacts.Data.Settings;
 
 namespace Contacts.Data
@@ -374,6 +375,38 @@ namespace Contacts.Data
             }
 
             return rowsAffected > 0;
+        }
+
+        public static DataTable GetAllCountries()
+        {
+            DataTable dt = new DataTable();
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            string query = "SELECT * FROM Countries;";
+
+            try
+            {
+                connection = new SqlConnection(clsDataSettings.connectionString);
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                    dt.Load(reader);
+            }
+            catch (Exception) { }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                    reader.Close();
+
+                if (connection != null && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return dt;
         }
     }
 }
