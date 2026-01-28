@@ -9,7 +9,7 @@ namespace Contacts.Business
         private enum enMode { AddNew, Update };
         private enMode _Mode = enMode.AddNew;
 
-        public int ID { get; set; } // ID is read only property, because it's an (outo number) emplemented.
+        public int ID { get; private set; } // ID is read only property, because it's an (outo number) emplemented.
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -196,6 +196,18 @@ namespace Contacts.Business
         {
             return clsCountriesData.IsCountryExist(id);
         }
+
+        public static clsCountry Find(string name)
+        {
+            int id = 0;
+            string code = "", phoneCode = "";
+
+            if (clsCountriesData.GetCountryInfoByName(name, ref id, ref code, ref phoneCode))
+                return new clsCountry(id, name, code, phoneCode);
+            else
+                return null;
+        }
+
     }
-    
+
 }

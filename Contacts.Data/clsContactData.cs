@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.SymbolStore;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using Contacts.Data.Settings;
 
@@ -439,6 +441,49 @@ namespace Contacts.Data
             }
 
             return isExist;
+        }
+
+        public static bool GetCountryInfoByName(string name, ref int id, ref string code, ref string phoneCode)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            bool isFound = false;
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            string query = @"SELECT * FROM Countries
+                            WHERE LOWER(CountryName) = LOWER(@name)";
+
+            try
+            {
+                connection = new SqlConnection(clsDataSettings.connectionString);
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@name", name);
+
+                reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    id = Convert.ToInt32(reader["CountryID"]);
+                    code = reader["Code"].ToString();
+                    phoneCode = reader["PhoneCode"].ToString();
+
+                    isFound = true;
+                }
+            }
+            catch(Exception) { }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                    reader.Close();
+
+                if (connection != null && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+
+            return isFound;
         }
     }
 }
