@@ -1,4 +1,4 @@
-# N-Tier Architecture Contacts Management Lab 🏗️ 
+# N-Tier Architecture Contacts Management Lab 🏗️
 
 A professional-grade demonstration of the **n-Tier Architecture** pattern using C# and .NET. This project serves as a technical laboratory for building decoupled, maintainable, and secure database-driven applications.
 
