@@ -1,6 +1,6 @@
 # N-Tier Architecture Contacts Management Lab 🏗️
 
-A professional-grade demonstration of the **n-Tier Architecture** pattern using C# and .NET. This project serves as a technical laboratory for building decoupled, maintainable, and secure database-driven applications.
+A professional-grade demonstration of the **n-Tier Architecture** pattern using C# and .NET. This project serves as a technical laboratory for building decoupled, maintainable, and secure database-driven applications. 
 
 ## 🏛️ Architectural Design
 The solution is strictly divided into multiple distinct layers (n-Tier) to ensure a professional separation of concerns. The primary strength of this project is the **multi-presentation capability**, where different UI technologies share the exact same logic and data layers.
